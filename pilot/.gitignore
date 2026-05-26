@@ -1,0 +1,26 @@
+# Raw sequencing data
+fastq/
+raw_sra/
+*.fastq
+*.fastq.gz
+*.sra
+
+# Reference files / indexes
+refs/
+*.fa
+*.fa.gz
+*.fasta
+*.fasta.gz
+*.gtf
+*.gff
+*.gff3
+*.gff3.gz
+
+# Salmon quant outputs 
+quant/
+
+#Ensemble gene mapping
+gene_mapping/
+
+#Mouse Index
+indexes/
