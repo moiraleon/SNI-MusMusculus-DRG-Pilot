@@ -136,15 +136,17 @@ cat("Maximum count:", max(count_matrix), "\n\n")
 cat("STEP 6: Creating DESeq2 dataset...\n")
 
 metadata$condition <- factor(metadata$condition)
+metadata$gse <- factor(metadata$gse)
 
-cat("Condition groups:\n")
-print(table(metadata$condition))
+cat("Condition by GSE table:\n")
+print(table(metadata$gse, metadata$condition))
 cat("\n")
 
 dds <- DESeqDataSetFromMatrix(
   countData = count_matrix,
   colData = metadata,
-  design = ~ condition
+  design = ~ gse
+#   design = ~ gse + condition
 )
 
 cat("DESeq2 dataset created successfully.\n")
