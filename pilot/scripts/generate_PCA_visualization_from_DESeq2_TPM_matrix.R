@@ -1,5 +1,8 @@
 setwd("~/Desktop/Professional/Development/Masters Data Analysis Scripts/SNI-MusMusculus-DRG-Pilot/pilot")
 
+# BiocManager::install("limma")
+library(limma)
+
 cat("\n==============================\n")
 cat("Starting PCA Plot Pipeline From Existing Matrix\n")
 cat("==============================\n\n")
@@ -120,13 +123,29 @@ cat("Genes retained:", nrow(log_expr_filtered), "\n")
 cat("Genes removed:", sum(!keep), "\n\n")
 
 # =========================================================
-# 7. Run PCA
+# 7. Remove batch effect
 # =========================================================
 
-cat("STEP 7: Running PCA...\n")
+cat("STEP 7: Removing batch effect...\n")
+
+batch_corrected <- removeBatchEffect(
+  log_expr_filtered,
+  batch = metadata$gse
+)
+
+cat("Batch effect removal complete.\n")
+cat("Batch-corrected matrix dimensions:\n")
+print(dim(batch_corrected))
+cat("\n")
+
+# =========================================================
+# 8. Run PCA
+# =========================================================
+
+cat("STEP 8: Running PCA...\n")
 
 pca <- prcomp(
-  t(log_expr_filtered),
+  t(batch_corrected),
   scale. = TRUE
 )
 
@@ -146,10 +165,10 @@ cat("PC1 variance:", percent_var[1], "%\n")
 cat("PC2 variance:", percent_var[2], "%\n\n")
 
 # =========================================================
-# 8. Save PCA coordinates
+# 9. Save PCA coordinates
 # =========================================================
 
-cat("STEP 8: Saving PCA coordinates...\n")
+cat("STEP 9: Saving PCA coordinates...\n")
 
 write_csv(
   pca_df,
@@ -159,10 +178,10 @@ write_csv(
 cat("Saved PCA coordinates.\n\n")
 
 # =========================================================
-# 9. Generate PCA plot by GSE
+# 10. Generate PCA plot by GSE
 # =========================================================
 
-cat("STEP 9: Generating PCA plot colored by GSE...\n")
+cat("STEP 10: Generating PCA plot colored by GSE...\n")
 
 pca_plot_gse <- ggplot(
   pca_df,
@@ -186,10 +205,10 @@ ggsave(
 cat("Saved PCA plot colored by GSE.\n\n")
 
 # =========================================================
-# 10. Generate PCA plot by condition
+# 11. Generate PCA plot by condition
 # =========================================================
 
-cat("STEP 10: Generating PCA plot colored by condition...\n")
+cat("STEP 11: Generating PCA plot colored by condition...\n")
 
 pca_plot_condition <- ggplot(
   pca_df,
