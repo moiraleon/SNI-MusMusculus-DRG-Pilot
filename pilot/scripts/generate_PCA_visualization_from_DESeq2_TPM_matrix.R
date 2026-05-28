@@ -231,6 +231,33 @@ ggsave(
 
 cat("Saved PCA plot colored by condition.\n\n")
 
+# =========================================================
+# 11. Generate PCA plot by tissue
+# =========================================================
+
+cat("STEP 11: Generating PCA plot colored by tissue...\n")
+
+pca_plot_tissue <- ggplot(
+  pca_df,
+  aes(x = PC1, y = PC2, color = tissue)
+) +
+  geom_point(size = 4) +
+  theme_minimal() +
+  labs(
+    title = "PCA from TPM Matrix Colored by Tissue",
+    x = paste0("PC1: ", percent_var[1], "% variance"),
+    y = paste0("PC2: ", percent_var[2], "% variance")
+  )
+
+ggsave(
+  "PCA_analysis/PCA_from_TPM_by_tissue.png",
+  pca_plot_tissue,
+  width = 8,
+  height = 6
+)
+
+cat("Saved PCA plot colored by tissue.\n\n")
+
 cat("==============================\n")
 cat("PCA PLOT PIPELINE COMPLETE\n")
 cat("==============================\n")
